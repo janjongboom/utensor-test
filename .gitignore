@@ -1,0 +1,4 @@
+.mbed
+mbed-os/
+mbed_settings.py*
+utensor/

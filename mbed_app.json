@@ -1,0 +1,16 @@
+{
+    "config": {
+        "main-stack-size": {
+            "value": 8192
+        }
+    },
+    "target_overrides": {
+        "*": {
+            "platform.stdio-baud-rate" : 115200,
+            "platform.stdio-convert-newlines": true
+        }
+    },
+    "macros": [
+        "MBED_HEAP_STATS_ENABLED=1"
+    ]
+}
