@@ -33,3 +33,9 @@ array([[9.9981266e-01, 1.8708695e-04, 2.8274363e-07],
        [0.0000000e+00, 2.2191929e-12, 1.0000000e+00],
        [0.0000000e+00, 2.5003938e-12, 1.0000000e+00]], dtype=float32)
 ```
+
+You can see this for the examples I included in `main.cpp` via:
+
+```
+python3 classify.py utensor-test.txt
+```

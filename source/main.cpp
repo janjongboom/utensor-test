@@ -26,7 +26,7 @@ void run_nn() {
     };
 
     // which one you want?
-    float *window = window_class_1;
+    float *window = window_class_3;
 
     WrappedRamTensor<float> *input_x = new WrappedRamTensor<float>({1, sizeof(window) / sizeof(window[0])}, window);
 
@@ -48,8 +48,13 @@ void run_nn() {
     printf("Called ctx_eval\n");
     print_memory_info();
 
-    float pred_label = *(pred_tensor->read<float>(0, 0));  //getting the result back
-    printf("Predicted label: %f\r\n", pred_label);
+    printf("Size: %lu\n", pred_tensor->getShape().size());
+
+    printf("Predictions:\n");
+    const float* ptr_pred = pred_tensor->read<float>(0, 0);
+    printf("%f\r\n", *ptr_pred);
+    printf("%f\r\n", *(ptr_pred + 1));
+    printf("%f\r\n", *(ptr_pred + 2));
     print_memory_info();
 }
 
