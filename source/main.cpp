@@ -26,7 +26,7 @@ void run_nn() {
     };
 
     // which one you want?
-    float *window = window_class_3;
+    float *window = window_class_2;
 
     WrappedRamTensor<float> *input_x = new WrappedRamTensor<float>({1, sizeof(window) / sizeof(window[0])}, window);
 
@@ -39,8 +39,7 @@ void run_nn() {
     printf("Got trained context\n");
     print_memory_info();
 
-    S_TENSOR pred_tensor = ctx.get("y_pred/Softmax:0");  // getting a reference to the output tensor
-
+    S_TENSOR pred_tensor = ctx.get("y_pred/ArgMax:0");  // getting a reference to the output tensor
     printf("Got pred_tensor\n");
     print_memory_info();
 
@@ -48,13 +47,20 @@ void run_nn() {
     printf("Called ctx_eval\n");
     print_memory_info();
 
-    printf("Size: %lu\n", pred_tensor->getShape().size());
+    printf("Size: ");
+    // printVector(pred_tensor->getShape());
 
     printf("Predictions:\n");
-    const float* ptr_pred = pred_tensor->read<float>(0, 0);
-    printf("%f\r\n", *ptr_pred);
-    printf("%f\r\n", *(ptr_pred + 1));
-    printf("%f\r\n", *(ptr_pred + 2));
+    // const float* ptr_pred = pred_tensor->read<float>(0, 0);
+    // printf("%f\r\n", *ptr_pred);
+    // printf("%f\r\n", *(ptr_pred + 1));
+    // printf("%f\r\n", *(ptr_pred + 2));
+
+    const int* ptr_pred = pred_tensor->read<int>(0, 0);
+    printf("%d\r\n", *ptr_pred);
+    // printf("%f\r\n", *(ptr_pred + 1));
+    // printf("%f\r\n", *(ptr_pred + 2));
+
     print_memory_info();
 }
 
