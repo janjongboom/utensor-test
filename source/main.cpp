@@ -26,50 +26,47 @@ void run_nn() {
     };
 
     // which one you want?
-    float *window = window_class_1;
-
-    WrappedRamTensor<float> *input_x = new WrappedRamTensor<float>({1, sizeof(window) / sizeof(window[0])}, window);
+    float *windows[] = {
+        window_class_1,
+        window_class_2,
+        window_class_3
+    };
 
     printf("Created WrappedRamTensor\n");
     print_memory_info();
 
-    Context ctx;
-    get_trained_ctx(ctx, input_x);
+    for (uint8_t ix = 0; ix < 3; ix++) {
+        printf("Classifying example %u\n", ix);
 
-    printf("Got trained context\n");
-    print_memory_info();
+        float *window = windows[ix];
 
-    S_TENSOR pred_tensor = ctx.get("y_pred/ArgMax:0");  // getting a reference to the output tensor
-    printf("Got pred_tensor\n");
-    print_memory_info();
+        // so my board hardfaults when removing this later, I guess the memory is managed by uTensor
+        // this is not good practice I'd say
+        RamTensor<float> *input_x = new RamTensor<float>({ 1, 186 });
+        float *buff = (float*)input_x->write(0, 0);
+        for (int ix = 0; ix < 186; ix++) {
+            buff[ix] = window[ix];
+        }
 
-    ctx.eval();
-    printf("Called ctx_eval\n");
-    print_memory_info();
+        Context ctx;
+        get_trained_ctx(ctx, input_x);
+        ctx.eval();
 
-    printf("Size: ");
-    // printVector(pred_tensor->getShape());
+        printf("Predictions:\n");
 
-    printf("Predictions:\n");
-    // const float* ptr_pred = pred_tensor->read<float>(0, 0);
-    // printf("%f\r\n", *ptr_pred);
-    // printf("%f\r\n", *(ptr_pred + 1));
-    // printf("%f\r\n", *(ptr_pred + 2));
+        S_TENSOR pred_tensor = ctx.get("y_pred/Softmax:0");  // getting a reference to the output tensor
+        printf("Got pred_tensor\n");
+        print_memory_info();
 
-    // print memory
-    const uint8_t* ptr_pred = (const uint8_t*)pred_tensor->read<float>(0, 0);
-    for (int i = 0; i < 8; i++) {
-        printf("%02x ", ptr_pred[i]);
+        const float* ptr_pred = pred_tensor->read<float>(0, 0);
+        printf("0: %f\r\n", *ptr_pred);
+        printf("0: %f\r\n", *(ptr_pred + 1));
+        printf("0: %f\r\n", *(ptr_pred + 2));
+
+        printf("\n");
+
+        // delete input_x;
     }
-    printf("\n");
-
-
-    // const float* ptr_pred = pred_tensor->read<float>(0, 0);
-    // printf("%f\r\n", *ptr_pred);
-    // printf("%f\r\n", *(ptr_pred + 1));
-    // printf("%f\r\n", *(ptr_pred + 2));
-
-    print_memory_info();
 }
 
 int main() {

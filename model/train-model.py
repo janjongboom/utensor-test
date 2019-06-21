@@ -30,7 +30,7 @@ model = Sequential()
 model.add(Dense(40, input_dim=186, activation='relu', name='x'))     # take X features number from create-testset.js here!
 # model.add(Dropout(0.5, seed=5, name='dropout1'))
 # model.add(Dense(20, activation='relu', name='hidden4'))
-model.add(Dense(classes, activation='softmax'))
+model.add(Dense(classes, activation='softmax', name='ypred'))
 
 # model.add(Dense(25, activation='relu', name='hidden3'))
 
@@ -42,7 +42,7 @@ model.add(Dense(classes, activation='softmax'))
 
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 model.fit(X_train, Y_train, batch_size=50, epochs=100, validation_data=(X_test, Y_test))
-model.add(Lambda(lambda x: K.cast(K.argmax(x, axis=0), dtype='float32'), name='y_pred'))
+# model.add(Lambda(lambda x: K.cast(K.argmax(x, axis=0), dtype='float32'), name='y_pred'))
 model.save('data/trained.h5')
 
 # Convert into TensorFlow PB file (as uTensor needs this)
