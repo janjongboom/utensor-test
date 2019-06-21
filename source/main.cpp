@@ -60,8 +60,8 @@ void run_nn() {
 
         const float* ptr_pred = pred_tensor->read<float>(0, 0);
         printf("0: %f\r\n", *ptr_pred);
-        printf("0: %f\r\n", *(ptr_pred + 1));
-        printf("0: %f\r\n", *(ptr_pred + 2));
+        printf("1: %f\r\n", *(ptr_pred + 1));
+        printf("2: %f\r\n", *(ptr_pred + 2));
 
         printf("\n");
 
