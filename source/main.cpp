@@ -26,7 +26,7 @@ void run_nn() {
     };
 
     // which one you want?
-    float *window = window_class_2;
+    float *window = window_class_1;
 
     WrappedRamTensor<float> *input_x = new WrappedRamTensor<float>({1, sizeof(window) / sizeof(window[0])}, window);
 
@@ -56,8 +56,16 @@ void run_nn() {
     // printf("%f\r\n", *(ptr_pred + 1));
     // printf("%f\r\n", *(ptr_pred + 2));
 
-    const float* ptr_pred = pred_tensor->read<float>(0, 0);
-    printf("%f\r\n", *ptr_pred);
+    // print memory
+    const uint8_t* ptr_pred = (const uint8_t*)pred_tensor->read<float>(0, 0);
+    for (int i = 0; i < 8; i++) {
+        printf("%02x ", ptr_pred[i]);
+    }
+    printf("\n");
+
+
+    // const float* ptr_pred = pred_tensor->read<float>(0, 0);
+    // printf("%f\r\n", *ptr_pred);
     // printf("%f\r\n", *(ptr_pred + 1));
     // printf("%f\r\n", *(ptr_pred + 2));
 
