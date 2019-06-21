@@ -1,5 +1,4 @@
 constants/
-data/trained.*
 raw-data/
 tensorflow-logs/
 utensor-models/

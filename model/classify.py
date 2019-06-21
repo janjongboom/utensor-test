@@ -23,7 +23,7 @@ def load_graph(frozen_graph_filename):
     return graph
 
 # We use our "load_graph" function
-graph = load_graph("./trained.pb")
+graph = load_graph("./data/trained.pb")
 
 # We can verify that we can access the list of operations in the graph
 for op in graph.get_operations():
