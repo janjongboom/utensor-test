@@ -1,7 +1,7 @@
 import keras
 from keras import backend as K
 from keras.models import Sequential
-from keras.layers import Dense, Dropout
+from keras.layers import Dense, Dropout, Lambda, Flatten, Layer
 import tensorflow as tf
 import numpy as np
 from tensorflow.python.framework.graph_util import convert_variables_to_constants
@@ -21,18 +21,28 @@ Y_test = np.loadtxt('data/y_test.txt')
 Y_train = keras.utils.to_categorical(Y_train-1, classes)
 Y_test = keras.utils.to_categorical(Y_test-1, classes)
 
+def argh(x):
+    print("x is", x, K.cast(K.argmax(x), dtype='float32'))
+    return K.cast(K.argmax(x, axis=0), dtype='float32')
+
+
 model = Sequential()
 model.add(Dense(40, input_dim=186, activation='relu', name='x'))     # take X features number from create-testset.js here!
-model.add(Dense(classes, activation='softmax', name='y_pred'))
+# model.add(Dropout(0.5, seed=5, name='dropout1'))
+# model.add(Dense(20, activation='relu', name='hidden4'))
+model.add(Dense(classes, activation='softmax'))
+
+# model.add(Dense(25, activation='relu', name='hidden3'))
+
 # model.add(Dense(100, activation='relu', name='hidden1'))
 # model.add(Dense(50, activation='relu', name='hidden2'))
 # model.add(Dropout(0.5, seed=5, name='dropout1'))
-# model.add(Dense(25, activation='relu', name='hidden3'))
 # # model.add(Dense(10, activation='relu', name='hidden4'))
 # model.add(Dense(5, activation='relu', name='hidden5'))
 
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 model.fit(X_train, Y_train, batch_size=50, epochs=100, validation_data=(X_test, Y_test))
+model.add(Lambda(lambda x: K.cast(K.argmax(x, axis=0), dtype='float32'), name='y_pred'))
 model.save('data/trained.h5')
 
 # Convert into TensorFlow PB file (as uTensor needs this)
